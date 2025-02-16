@@ -37,7 +37,7 @@ public class Tests {
     //Returns the average
     public String toString() {
         DecimalFormat df = new DecimalFormat("0.00");
-        double average = (count == 0) ? Double.NaN : sum / count;  // Avoid division by zero
+        double average = (count == 0) ? Double.NaN : sum / count;
         return "The average of the " + count + " scores entered is " + df.format(average) + ".";
     }
 }
