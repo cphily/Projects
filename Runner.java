@@ -1,55 +1,66 @@
+import javax.swing.JOptionPane;
+
+/**
+ This program demonstrates the Exam class,
+ which extends the Assessment class.
+ */
 public class Runner {
-    //exercises the ArrList class
+
     public static void main(String[] args) {
-        //instantiate IntArray object
-        IntArray iArr = new IntArray(10);
-        int leng = iArr.size();
+        String input;     //To hold input
+        int questions = 0;    //Number of questions
+        int missed = 0;       //Number of questions missed
 
-        //display size of array == number of array elements
-        System.out.println("The number of array elements is: " + leng);
+        boolean validInput = false;
 
-        //this method fills array with random numbers
-        iArr.fillRand();
-        //print out array to prove the fillRand method worked
-        System.out.println("Array with 10 elements filled with random numbers between 1 and 6");
-        System.out.println(iArr);
+        //Loops until valid input is given for number of questions
+        while (!validInput) {
+            try {
+                input = JOptionPane.showInputDialog("How many questions are on the exam?");
+                questions = Integer.parseInt(input);
 
-        //set a certain array element to a new value
-        iArr.set(5, 6789);
+                if (questions <= 0) {
+                    throw new ArithmeticException("Number of questions must be greater than 0.");
+                }
 
-        //display the value of the that new value at position 5 (you can change this index)
-        System.out.println("The value of array element 5 is: " + iArr.get(5));
-
-        //display all array data, watch for the changed element!
-        System.out.println(iArr);
-
-        //clear the array == delete the values and all the elements
-        iArr.clear();
-
-        //check if array is now empty
-        if (iArr.isEmpty()) {
-            System.out.println("iArr is empty\n");
+                validInput = true;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid number for questions.");
+            } catch (ArithmeticException e) {
+                JOptionPane.showMessageDialog(null, "Number of questions must be greater than 0.");
+            }
         }
 
-        //allocate new array elements
-        iArr = new IntArray(100);
+        validInput = false;
 
-        //this method fills array with random numbers
-        iArr.fillRand();
-        //print out array to prove the fillRand method worked
+        //Loops until valid input is given for number of missed questions
+        while (!validInput) {
+            try {
+                input = JOptionPane.showInputDialog("How many questions did the student miss?");
+                missed = Integer.parseInt(input);
 
-        System.out.println("Array with 100 elements filled with random numbers between 1 and 6");
-        System.out.println(iArr);
+                if (missed < 0 || missed > questions) {
+                    throw new IllegalArgumentException("Missed questions must be between 0 and " + questions);
+                }
 
-        //sort the array
-        if(!iArr.isEmpty()){
-            iArr.sort();
+                validInput = true;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid number for missed questions.");
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
-        else System.out.println("Array is empty, nothing to sort");
 
-        //print out array to prove the sort method worked
-        System.out.println("Array after sorting\n");
-        System.out.println(iArr);
+        //Create an Exam object
+        Exam exam = new Exam(questions, missed);
 
+        //Displays the test results
+        String message = "Each question counts " + exam.getPointsEach();
+        message += " points.\nThe exam score is " + exam.getScore();
+        message += "\nThe exam grade is " + exam.getGrade();
+        JOptionPane.showMessageDialog(null, message);
+
+        System.exit(0);
     }
 }
+
